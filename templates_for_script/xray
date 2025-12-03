@@ -37,9 +37,11 @@
         "enabled": true,
         "destOverride": [
           "http",
-          "tls"
+          "tls",
+          "quic",
+          "fakedns"
         ],
-        "routeOnly": true
+        "routeOnly": false
       }
     }
   ],

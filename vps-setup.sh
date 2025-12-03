@@ -3,7 +3,7 @@
 set -e
 
 export GIT_BRANCH="main"
-export GIT_REPO="Akiyamov/xray-vps-setup"
+export GIT_REPO="dotes-totes-notes/xray-vps-setup"
 
 # Check if script started as root
 if [ "$EUID" -ne 0 ]
@@ -11,9 +11,9 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-# Install idn 
+# Install idn
 apt-get update
-apt-get install idn sudo dnsutils -y 
+apt-get install idn sudo dnsutils -y
 
 # Read domain input
 read -ep "Enter your domain:"$'\n' input_domain
@@ -29,7 +29,7 @@ if [ -z "$RESOLVED_IP" ]; then
   read -ep "Are you sure? That domain has no DNS record. If you didn't add that you will have to restart xray and caddy by yourself [y/N]"$'\n' prompt_response
   if [[ "$prompt_response" =~ ^([yY])$ ]]; then
     echo "Ok, proceeding without DNS verification"
-  else 
+  else
     echo "Come back later"
     exit 1
   fi
@@ -41,7 +41,7 @@ else
       break
     fi
   done
-  
+
   if [ "$MATCH_FOUND" = true ]; then
     echo "✓ DNS record points to this server ($RESOLVED_IP)"
   else
@@ -51,7 +51,7 @@ else
     read -ep "Continue anyway? [y/N]"$'\n' prompt_response
     if [[ "$prompt_response" =~ ^([yY])$ ]]; then
       echo "Ok, proceeding"
-    else 
+    else
       echo "Come back later"
       exit 1
     fi
@@ -141,8 +141,8 @@ xray_setup() {
      .services.marzban.container_name = "marzban" |
      .services.marzban.restart = "always" |
      .services.marzban.env_file = "./marzban/.env" |
-     .services.marzban.network_mode = "host" | 
-     .services.marzban.volumes[0] = "./marzban_lib:/var/lib/marzban" | 
+     .services.marzban.network_mode = "host" |
+     .services.marzban.volumes[0] = "./marzban_lib:/var/lib/marzban" |
      .services.marzban.volumes[1] = "./marzban/xray_config.json:/code/xray_config.json" |
      .services.marzban.volumes[2] = "./marzban/templates:/var/lib/marzban/templates" |
      .services.caddy.volumes[2] = "./marzban_lib:/run/marzban"' -i /opt/xray-vps-setup/docker-compose.yml
@@ -157,12 +157,12 @@ xray_setup() {
     wget -qO- https://raw.githubusercontent.com/$GIT_REPO/refs/heads/$GIT_BRANCH/templates_for_script/compose | envsubst > ./docker-compose.yml
     mkdir -p /opt/xray-vps-setup/caddy/templates
     yq eval \
-    '.services.xray.image = "ghcr.io/xtls/xray-core:25.6.8" | 
+    '.services.xray.image = "ghcr.io/xtls/xray-core:25.12.2" |
     .services.xray.container_name = "xray" |
     .services.xray.user = "root" |
     .services.xray.command = "run -c /etc/xray/config.json" |
-    .services.xray.restart = "always" | 
-    .services.xray.network_mode = "host" | 
+    .services.xray.restart = "always" |
+    .services.xray.network_mode = "host" |
     .services.caddy.volumes[2] = "./caddy/templates:/srv" |
     .services.xray.volumes[0] = "./xray:/etc/xray"' -i /opt/xray-vps-setup/docker-compose.yml
     wget -qO- https://raw.githubusercontent.com/$GIT_REPO/refs/heads/$GIT_BRANCH/templates_for_script/confluence_page | envsubst > ./caddy/templates/index.html
@@ -228,9 +228,9 @@ warp_install() {
   echo "If this fails then warp won't be added to routing and everything will work without it"
   curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
   echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
-  apt update 
+  apt update
   apt install cloudflare-warp -y
-  
+
   echo "y" | warp-cli registration new
   export TRY_WARP=$(echo $?)
   if [[ $TRY_WARP != 0 ]]; then
@@ -259,7 +259,7 @@ end_script() {
   if [[ ${configure_warp_input,,} == "y" ]]; then
     warp_install
   fi
-  
+
   if [[ "${marzban_input,,}" == "y" ]]; then
     docker run -v /opt/xray-vps-setup/caddy/Caddyfile:/opt/xray-vps-setup/Caddyfile --rm caddy caddy fmt --overwrite /opt/xray-vps-setup/Caddyfile
     docker compose -f /opt/xray-vps-setup/docker-compose.yml up -d
@@ -289,7 +289,7 @@ $singbox_config
 
 Plain data:
 PBK: $XRAY_PBK, SID: $XRAY_SID, UUID: $XRAY_UUID
-    "    
+    "
   fi
 
   docker rmi ghcr.io/xtls/xray-core:latest caddy:latest
