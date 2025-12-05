@@ -1,29 +1,28 @@
 {
   "log": {
-    "loglevel": "none"
+    "loglevel": "info"
   },
   "inbounds": [
     {
-      "tag": "VLESS TCP VISION REALITY",
-      "listen": "0.0.0.0",
-      "port": 443,
+      "tag": "VLESS_XHTTP",
+      "listen": "127.0.0.1",
+      "port": 4123,
       "protocol": "vless",
       "settings": {
         "clients": [
           {
             "id": "$XRAY_UUID",
             "email": "default",
-            "flow": "xtls-rprx-vision"
           }
         ],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
         "realitySettings": {
           "xver": 1,
-          "dest": "127.0.0.1:4123",
+          "target": "127.0.0.1:443",
           "serverNames": [
             "$VLESS_DOMAIN"
           ],
@@ -31,6 +30,9 @@
           "shortIds": [
             "$XRAY_SID"
           ]
+        },
+        "xhttpSettings": {
+          "path": "/api/v1/synbomzha"
         }
       },
       "sniffing": {
@@ -50,7 +52,7 @@
       "protocol": "freedom",
       "tag": "direct",
       "settings": {
-        "domainStrategy": "UseIPv4"
+        "domainStrategy": "UseIP"
       }
     },
     {
@@ -69,8 +71,7 @@
   },
   "dns": {
     "servers": [
-      "1.1.1.1",
-      "8.8.8.8"
+      "https://1.1.1.1/dns-query"
     ],
     "queryStrategy": "UseIPv4",
     "disableFallback": false,
