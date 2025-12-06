@@ -1,49 +1,54 @@
-# HTTP to HTTPS redirect
+{
+    https_port 4123
+    default_bind 127.0.0.1
+
+    servers {
+        listener_wrappers {
+            proxy_protocol {
+                allow 127.0.0.1/32
+            }
+            tls
+        }
+    }
+
+    auto_https disable_redirects
+}
+
+https://$VLESS_DOMAIN {
+    $CADDY_REVERSE
+
+    header {
+        -Server
+    }
+
+    handle_errors {
+        header {
+            -Server
+        }
+    }
+}
+
 http://$VLESS_DOMAIN {
     bind 0.0.0.0
     redir https://$VLESS_DOMAIN{uri} permanent
 
     header {
-            -Server
+        -Server
     }
 
     handle_errors {
-            header {
-                    -Server
-            }
+        header {
+            -Server
+        }
     }
 }
 
-https://$VLESS_DOMAIN {
+:4123 {
+    tls internal
+    respond 204
+}
+
+:80 {
     bind 0.0.0.0
-    $CADDY_REVERSE
-
-    header {
-            -Server
-    }
-
-    handle_errors {
-            header {
-                    -Server
-            }
-    }
-
-    tls {
-        protocols tls1.2
-    }
-
-    # XRay proxying
-    @xray_path {
-        path /api/v1/synbomzha
-    }
-
-    reverse_proxy @xray_path 127.0.0.1:4123 {
-        transport http {
-            versions h2c
-            read_timeout 315s
-            write_timeout 300s
-        }
-
-        header_up X-Forwarded-For {remote_host}
-    }
+    respond 204
 }

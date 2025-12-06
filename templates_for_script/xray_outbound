@@ -10,14 +10,16 @@
           {
             "id": "$XRAY_UUID",
             "encryption": "none",
-            "flow": "xtls-rprx-vision"
           }
         ]
       }
     ]
   },
   "streamSettings": {
-    "network": "tcp",
+    "network": "xttp",
+    "xhttpSettings": {
+      "path": "/bitchlovesoso"
+    },
     "security": "reality",
     "realitySettings": {
       "serverName": "$VLESS_DOMAIN",
