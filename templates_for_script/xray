@@ -4,33 +4,22 @@
   },
   "inbounds": [
     {
-      "tag": "VLESS TCP VISION REALITY",
-      "listen": "0.0.0.0",
-      "port": 443,
+      "tag": "VLESS grpc",
+      "listen": "127.0.0.1",
+      "port": 8080,
       "protocol": "vless",
       "settings": {
         "clients": [
           {
             "id": "$XRAY_UUID",
-            "email": "default",
-            "flow": "xtls-rprx-vision"
           }
         ],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "tcp",
-        "security": "reality",
-        "realitySettings": {
-          "xver": 1,
-          "dest": "127.0.0.1:4123",
-          "serverNames": [
-            "$VLESS_DOMAIN"
-          ],
-          "privateKey": "$XRAY_PIK",
-          "shortIds": [
-            "$XRAY_SID"
-          ]
+        "network": "grpc",
+        "grpcSettings": {
+          "serviceName": "/v2/dotestotes"
         }
       },
       "sniffing": {
@@ -50,7 +39,7 @@
       "protocol": "freedom",
       "tag": "direct",
       "settings": {
-        "domainStrategy": "UseIPv4"
+        "domainStrategy": "UseIP"
       }
     },
     {
@@ -72,7 +61,7 @@
       "1.1.1.1",
       "8.8.8.8"
     ],
-    "queryStrategy": "UseIPv4",
+    "queryStrategy": "UseIP",
     "disableFallback": false,
     "tag": "dns-aux"
   }

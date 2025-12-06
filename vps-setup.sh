@@ -2,7 +2,7 @@
 
 set -e
 
-export GIT_BRANCH="main"
+export GIT_BRANCH="grpc"
 export GIT_REPO="dotes-totes-notes/xray-vps-setup"
 
 # Check if script started as root
