@@ -1,12 +1,12 @@
 {
   "log": {
-    "loglevel": "none"
+    "loglevel": "warning"
   },
   "inbounds": [
     {
-      "tag": "VLESS grpc",
-      "listen": "127.0.0.1",
-      "port": 8080,
+      "tag": "VLESS GRPC REALITY",
+      "listen": "0.0.0.0",
+      "port": 443,
       "protocol": "vless",
       "settings": {
         "clients": [
@@ -18,8 +18,19 @@
       },
       "streamSettings": {
         "network": "grpc",
+        "realitySettings": {
+          "xver": 1,
+          "dest": "127.0.0.1:4123",
+          "serverNames": [
+            "$VLESS_DOMAIN"
+          ],
+          "privateKey": "$XRAY_PIK",
+          "shortIds": [
+            "$XRAY_SID"
+          ]
+        },
         "grpcSettings": {
-          "serviceName": "/v2/dotestotes"
+          "serviceName": "bitchlovesoso"
         }
       },
       "sniffing": {
@@ -27,8 +38,7 @@
         "destOverride": [
           "http",
           "tls",
-          "quic",
-          "fakedns"
+          "quic"
         ],
         "routeOnly": false
       }
@@ -51,6 +61,11 @@
     "rules": [
       {
         "protocol": "bittorrent",
+        "outboundTag": "block"
+      },
+      {
+        "port": "443",
+        "network": "udp",
         "outboundTag": "block"
       }
     ],

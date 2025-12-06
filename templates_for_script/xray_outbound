@@ -17,10 +17,19 @@
   },
   "streamSettings": {
     "network": "grpc",
-    "security": "tls",
+    "security": "reality",
+    "realitySettings": {
+      "serverName": "$VLESS_DOMAIN",
+      "fingerprint": "chrome",
+      "publicKey": "$XRAY_PBK",
+      "shortId": "$XRAY_SID",
+      "spiderX": ""
+    },
     "grpcSettings": {
-          "serviceName": "/v2/dotestotes",
-          "multiMode": false
+          "serviceName": "bitchlovesoso",
+          "multiMode": true,
+          "idle_timeout": 60,
+          "health_check_timeout": 20
         }
   }
 }
