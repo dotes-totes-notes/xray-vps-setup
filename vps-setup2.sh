@@ -162,7 +162,7 @@ xray_setup() {
   elif [[ $PROTO == "grpc" ]]; then
     cat ./templates_for_script/xray_grpc.tpl | envsubst > ./xray/config.json
     final_msg="Clipboard string format:
-  vless://$XRAY_UUID@$VLESS_DOMAIN:443?type=grpc&security=reality&pbk=$XRAY_PBK&fp=chrome&sni=$VLESS_DOMAIN&sid=$XRAY_SID&spx=%2F&flow=xtls-rprx-vision
+  vless://$XRAY_UUID@$VLESS_DOMAIN:443?type=grpc&serviceName=bitchlovesoso&security=reality&pbk=$XRAY_PBK&sid=$XRAY_SID&sni=dotestotes.space&fp=chrome&spx=%2F#veesp%20grpc%20fin
 
   Plain data:
   PBK: $XRAY_PBK, SID: $XRAY_SID, UUID: $XRAY_UUID
