@@ -4,7 +4,7 @@
   },
   "inbounds": [
     {
-      "tag": "VLESS TCP VISION REALITY",
+      "tag": "VLESS TCP REALITY",
       "listen": "0.0.0.0",
       "port": 443,
       "protocol": "vless",
@@ -50,7 +50,7 @@
       "protocol": "freedom",
       "tag": "direct",
       "settings": {
-        "domainStrategy": "UseIPv4"
+        "domainStrategy": "UseIP"
       }
     },
     {
@@ -69,10 +69,10 @@
   },
   "dns": {
     "servers": [
-      "1.1.1.1",
-      "8.8.8.8"
+      "https://1.1.1.1/dns-query",
+      "https://8.8.8.8/dns-query"
     ],
-    "queryStrategy": "UseIPv4",
+    "queryStrategy": "UseIP",
     "disableFallback": false,
     "tag": "dns-aux"
   }

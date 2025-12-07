@@ -12,7 +12,8 @@
         auto_https disable_redirects
 }
 https://$VLESS_DOMAIN {
-        $CADDY_REVERSE
+        root * /srv
+        file_server
 
         header  {
                 -Server

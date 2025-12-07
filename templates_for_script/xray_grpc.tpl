@@ -1,42 +1,46 @@
 {
   "log": {
-    "loglevel": "info"
+    "loglevel": "none"
   },
   "inbounds": [
     {
-      "tag": "VLESS TCP VISION REALITY",
+      "tag": "VLESS GRPC REALITY",
       "listen": "0.0.0.0",
       "port": 443,
       "protocol": "vless",
       "settings": {
         "clients": [
-        {
-          "id": "{{ xray_uuid.stdout}}",
-          "email": "default",
-          "flow": "xtls-rprx-vision"
-        }],
+          {
+            "id": "$XRAY_UUID"
+          }
+        ],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "grpc",
         "security": "reality",
         "realitySettings": {
           "xver": 1,
           "dest": "127.0.0.1:4123",
           "serverNames": [
-            "{{ domain }}"
+            "$VLESS_DOMAIN"
           ],
-          "privateKey": "{{ x25519_pik.stdout }}",
+          "privateKey": "$XRAY_PIK",
           "shortIds": [
-            "{{ short_id.stdout }}"
+            "$XRAY_SID"
           ]
+        },
+        "grpcSettings": {
+          "serviceName": "bitchlovesoso"
         }
       },
       "sniffing": {
         "enabled": true,
         "destOverride": [
           "http",
-          "tls"
+          "tls",
+          "quic",
+          "fakedns"
         ],
         "routeOnly": true
       }
@@ -47,7 +51,7 @@
       "protocol": "freedom",
       "tag": "direct",
       "settings": {
-        "domainStrategy": "UseIPv4"
+        "domainStrategy": "UseIP"
       }
     },
     {
@@ -66,10 +70,10 @@
   },
   "dns": {
     "servers": [
-      "1.1.1.1",
-      "8.8.8.8"
+      "https://1.1.1.1/dns-query",
+      "https://8.8.8.8/dns-query"
     ],
-    "queryStrategy": "UseIPv4",
+    "queryStrategy": "UseIP",
     "disableFallback": false,
     "tag": "dns-aux"
   }

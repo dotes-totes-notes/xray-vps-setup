@@ -1,6 +1,6 @@
 services:
   caddy:
-    image: caddy:2.9
+    image: caddy:2.10
     container_name: caddy
     restart: always
     network_mode: host
@@ -9,11 +9,11 @@ services:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - ./caddy/templates:/srv
   xray:
-    image: ghcr.io/xtls/xray-core:25.6.8
-    restart: always
+    image: ghcr.io/xtls/xray-core:25.12.2
     container_name: xray
     user: root
     command: run -c /etc/xray/config.json
+    restart: always
     network_mode: host
     volumes:
       - ./xray:/etc/xray
