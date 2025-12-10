@@ -42,7 +42,7 @@
           "quic",
           "fakedns"
         ],
-        "routeOnly": true
+        "routeOnly": false
       }
     }
   ],
