@@ -76,8 +76,14 @@ sudo usermod -aG docker $USER
 ### Получение данных для прокси
 В этой части будут описаны необходимые данные, а также способ их получения. Позже эти данные будут использованы в конфигурации.  
 - __VLESS_DOMAIN__: Ваш домен. Если используется punycode, то далее используется ТОЛЬКО на латинице.  
-- __XRAY_PBK+PIK__: `docker run --rm ghcr.io/xtls/xray-core x25519`
-Оба значения для нас важны, Public key = PBK, Private key = PIK.  
+- __XRAY_PBK+PIK__: `docker run --rm ghcr.io/xtls/xray-core:26.9.8 x25519`
+Команда выводит три строки:
+```
+PrivateKey: ...            <- это PIK
+Password (PublicKey): ...  <- это PBK
+Hash32: ...                <- не используется
+```
+Оба первых значения для нас важны. В более ранних версиях вторая строка называлась просто `Password:`, а ещё раньше — `Public key:`; во всех случаях это один и тот же публичный ключ.  
 - __XRAY_SID__: `openssl rand -hex 8`
 Short id, используется для различения разных клиентов  
 
@@ -133,7 +139,7 @@ services:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - ./caddy/templates:/srv
   xray:
-    image: ghcr.io/xtls/xray-core:25.1.1
+    image: ghcr.io/xtls/xray-core:26.9.8
     restart: always
     network_mode: host
     volumes:

@@ -3,6 +3,8 @@
 set -e
 
 export GIT_REPO="https://github.com/dotes-totes-notes/xray-vps-setup.git"
+# Keep in sync with .services.xray.image in docker-compose.yaml
+export XRAY_IMAGE="ghcr.io/xtls/xray-core:26.9.8"
 
 # Check if script started as root
 if [ "$EUID" -ne 0 ]
@@ -136,10 +138,18 @@ export SSH_PORT=${input_ssh_port:-22}
 export ROOT_LOGIN="yes"
 export IP_CADDY=$(hostname -I | cut -d' ' -f1)
 export CADDY_BASIC_AUTH=$(docker run --rm caddy caddy hash-password --plaintext $SSH_USER_PASS)
-export XRAY_PIK=$(docker run --rm ghcr.io/xtls/xray-core x25519 | head -n1 | cut -d' ' -f 2)
-export XRAY_PBK=$(docker run --rm ghcr.io/xtls/xray-core x25519 -i $XRAY_PIK | tail -2 | head -1 | cut -d' ' -f 2)
+# Keys must come from the same image version that docker-compose.yaml runs.
+XRAY_KEYS=$(docker run --rm $XRAY_IMAGE x25519)
+# "Password: <key>" (<= 25.12.x) and "Password (PublicKey): <key>" (>= 26.x) both split on ": "
+export XRAY_PIK=$(awk -F': ' '/^PrivateKey/{print $2}' <<<"$XRAY_KEYS")
+export XRAY_PBK=$(awk -F': ' '/^Password/{print $2}' <<<"$XRAY_KEYS")
+if [ -z "$XRAY_PIK" ] || [ -z "$XRAY_PBK" ]; then
+  echo "Failed to parse x25519 output of $XRAY_IMAGE:"
+  echo "$XRAY_KEYS"
+  exit 1
+fi
 export XRAY_SID=$(openssl rand -hex 8)
-export XRAY_UUID=$(docker run --rm ghcr.io/xtls/xray-core uuid)
+export XRAY_UUID=$(docker run --rm $XRAY_IMAGE uuid)
 export XRAY_CFG="/usr/local/etc/xray/config.json"
 
 # Install marzban
@@ -278,7 +288,7 @@ end_script() {
 # PBK: $XRAY_PBK, SID: $XRAY_SID, UUID: $XRAY_UUID
 #     "
 
-  docker rmi ghcr.io/xtls/xray-core:latest caddy:latest
+  docker rmi caddy:latest
   #clear
   echo "$final_msg"
   if [[ ${configure_ssh_input,,} == "y" ]]; then
