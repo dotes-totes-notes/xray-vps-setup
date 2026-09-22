@@ -162,7 +162,7 @@ xray_setup() {
   elif [[ $PROTO == "grpc" ]]; then
     cat ./templates_for_script/xray_grpc.tpl | envsubst > ./xray/config.json
     final_msg="Clipboard string format:
-  vless://$XRAY_UUID@$VLESS_DOMAIN:443?type=grpc&serviceName=bitchlovesoso&security=reality&pbk=$XRAY_PBK&sid=$XRAY_SID&sni=dotestotes.space&fp=chrome&spx=%2F#veesp%20grpc%20fin
+  vless://$XRAY_UUID@$VLESS_DOMAIN:443?type=grpc&serviceName=bitchlovesoso&security=reality&pbk=$XRAY_PBK&sid=$XRAY_SID&sni=$VLESS_DOMAIN&fp=chrome&spx=%2F#veesp%20grpc%20fin
 
   Plain data:
   PBK: $XRAY_PBK, SID: $XRAY_SID, UUID: $XRAY_UUID
@@ -170,7 +170,7 @@ xray_setup() {
   elif [[ $PROTO == "xhttp" ]]; then
     cat ./templates_for_script/xray_xhttp.tpl | envsubst > ./xray/config.json
     final_msg="Clipboard string format:
-  vless://$XRAY_UUID@$VLESS_DOMAIN:443?type=xhttp&security=reality&pbk=$XRAY_PBK&fp=chrome&sni=$VLESS_DOMAIN&sid=$XRAY_SID&spx=%2F&flow=xtls-rprx-vision
+  vless://$XRAY_UUID@$VLESS_DOMAIN:443?type=xhttp&path=%2Fbitchlovesoso&security=reality&pbk=$XRAY_PBK&fp=chrome&sni=$VLESS_DOMAIN&sid=$XRAY_SID&spx=%2F
 
   Plain data:
   PBK: $XRAY_PBK, SID: $XRAY_SID, UUID: $XRAY_UUID
