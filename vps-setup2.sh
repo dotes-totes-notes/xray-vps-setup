@@ -4,7 +4,7 @@ set -e
 
 export GIT_REPO="https://github.com/dotes-totes-notes/xray-vps-setup.git"
 # Keep in sync with .services.xray.image in docker-compose.yaml
-export XRAY_IMAGE="ghcr.io/xtls/xray-core:26.9.8"
+export XRAY_IMAGE="ghcr.io/xtls/xray-core:26.6.27"
 
 # Check if script started as root
 if [ "$EUID" -ne 0 ]
